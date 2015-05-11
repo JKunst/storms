@@ -1,0 +1,463 @@
+\documentclass[12pt]{article}
+
+\usepackage{listings}
+\usepackage{float}
+\usepackage[caption = false]{subfig}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{amsmath}
+\begin{document}
+
+\begin{titlepage}
+
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}} % Defines a new command for the horizontal lines, change thickness here
+
+\center % Center everything on the page
+ 
+%----------------------------------------------------------------------------------------
+%	HEADING SECTIONS
+%----------------------------------------------------------------------------------------
+
+\textsc{\LARGE University of Amsterdam}\\[1.5cm] % Name of your university/college
+\textsc{\Large ALM Cases - Final Report}\\[0.5cm] % Major heading such as course name
+\textsc{\large Group B3}\\[0.5cm] % Minor heading such as course title
+
+%----------------------------------------------------------------------------------------
+%	TITLE SECTION
+%----------------------------------------------------------------------------------------
+
+\HRule \\[0.4cm]
+{ \huge \bfseries The Long Run}\\[0.4cm] % Title of your document
+\HRule \\[1.5cm]
+ 
+%----------------------------------------------------------------------------------------
+%	AUTHOR SECTION
+%----------------------------------------------------------------------------------------
+
+\begin{minipage}{0.4\textwidth}
+\begin{flushleft} \large
+\emph{Authors:}\\
+Caroline \textsc{Goedhart} \\
+Jasper \textsc{Kunst} \\
+Dani\"el \textsc{Lintvelt} \\
+Amaranta \textsc{Twelker} % Your name
+\end{flushleft}
+\end{minipage}
+~
+\begin{minipage}{0.4\textwidth}
+\begin{flushright} \large
+\emph{Studentnumbers:} \\
+ 6118259 \\
+ 6065082 \\
+ 5880882 \\
+ 10185615
+ % Supervisor's Name
+\end{flushright}
+\end{minipage}\\[4cm]
+
+% If you don't want a supervisor, uncomment the two lines below and remove the section above
+%\Large \emph{Author:}\\
+%John \textsc{Smith}\\[3cm] % Your name
+
+%----------------------------------------------------------------------------------------
+%	DATE SECTION
+%----------------------------------------------------------------------------------------
+
+{\large \today}\\[3cm] % Date, change the \today to a set date if you want to be precise
+
+%----------------------------------------------------------------------------------------
+%	LOGO SECTION
+%----------------------------------------------------------------------------------------
+
+%\includegraphics{Logo}\\[1cm] % Include a department/university logo - this will require the graphicx package
+ 
+%----------------------------------------------------------------------------------------
+
+\vfill % Fill the rest of the page with whitespace
+
+\end{titlepage}
+
+\tableofcontents
+
+\newpage
+
+\section{Introduction}
+In this final report the ALM team will give the management of the Long Run the results of the ALM study. The report consists of results, advice and technical documentation.
+\\ \\
+The ALM team will try to answer the management the questions asked in their assignment. Where possible and appropriate the ALM team did not hesitate to extend the scope of the research to give the Long Run valuable management information. \\ \\
+First we give some background on the company, then there will some guidance where management can find the answers on their questions in this report. We will answer the questions by specifying and motivating the model we used. The tooling will be briefly addressed and we end this report with Results and recommendations. 
+
+\subsection{Background on the Long Run}
+The Long Run wants to be a stable, reliable, low-cost insurance company as an anchor point in a volatile and insecure world. To be this anchor point for its clients the Long Run needs to be proper managed and an important part of this management is the risk management. 
+Due to uncertainty concerning increasing life expectancies, longevity risk must be taken into account when The Long Run wants to have their risks under control. Longevity risk can be perceived as the slowest risk, but potentially as the most dangerous one. Therefore it is of great importance to model the trend in future mortality as accurately as possible. Furthermore, one must think about the advantages of taking a position in a longevity swap, and exchange longevity risk for a premium. 
+\\ \\
+The Long Run has a portfolio of life insurance policies with the benefits pattern as in figure 1. On the other side of the balance are bonds, credit, mortgage and stock. The liabilities have a duration of 21.87 years which is matched by the method of key-rate duration (see section ..) by the assets division of the Long Run. The prospects for the Long Run are in general very well. Lapse risk is in recent years neutralised by restructuring the policies. The effect of lapse risk on the technical provision is immaterial at this moment and this is not expected to change. However the longevity risk can have severe consequences if demographic trends continue this way and the Long Run does not take action.
+
+\begin{figure}[ht!]
+	\centering
+	\includegraphics[width=100mm]{benefits.pdf}
+	\caption{Benefits against exposure}
+\end{figure}
+
+
+\subsection{Management assignment}
+The ALM team was asked to make a study of the longevity risk that the Long Run bares. The following list shows where items the management desired and where answers can be found.
+\begin{itemize}
+	\item What are the expectation and the risks if the current policy is perpetuated. \\
+		\emph{This is already addressed in the background section above}
+		
+	\item A comparison between the Lee Carter model and at least one structurally different models. 
+	\emph{Three models will be compared in section ...}
+	
+	 \item A cost-benefit analysis of taking a longevity swap under which premium is each longevity swap worth it?
+	 \emph{ ... }
+	 
+    \item How does the longevity swap change the duration of liabilites.
+      \emph{For the results of buying longevity swaps see the section Pricing results.}
+      
+\item Possible alternative asset mixes.
+%Make an alternative set of asset mixes (bonds, stocks, t-bills, commodities, real estate) and simulate scenario’s with a VAR or copula model (that is estimated by you with market data) . Determine for each duration distribution under (2) the best asset mix if you take the following components of the (BE, VaR(95), VaR(99), tVaR(95)) [of the profit]
+ \emph{ .. }
+ 
+	\item An advice about the best pair of choices regarding assets and liabilities. Including the options of longevity swaps and its premia. 
+	 \emph{ .. }
+	 
+	\item Determine whether the best pair of choices is Solvency II compliant with respect to the funding ratio.
+	 \{emph{ .. }
+\end{itemize}
+
+%------------------------------------------------------------------------------------
+\section{Model choice and motivation}
+\subsection{Mortality model} % from the workplan
+There are several ways of modeling mortality. Since the actuarial department recommended to use the Lee-Carter model because of its ‘good’ fit, we view this as our most natural choice. Using the Lee-Carter model is a logical advise of the actuarial department, since it is the leading statistical model of mortality in the literature as is stated in Deaton and Paxson (2004). However, we will also compare the Lee-Carter model to some alternatives. 
+ 
+ \subsubsection{Lee-Carter model}The Lee-Carter model (Lee, 2000) is a stochastic model for forecasting mortality that has been developed in 1992 by Lee and Carter. The model is commonly used and relatively simple. The model extrapolates the mortality trend based on historical data and it is defined as:
+
+$$ln(m_{x,t})=a_{x}+b_{x}k_{t}+e_{x,t}$$
+
+where $a_{x}$ describes the average shape of the age profile, $b_{x}$ describes the deviation from that age profile when  varies and $e_{x,t}$ is the error term. Here $k_{t}$ is a stochastic term that tracks mortality over time. We impose the conditions $\sum_{x}b_{x}=1$ and $\sum_{x}k_{x}=1$. This implies that $a_{x}$ is just the average value over time of $ln(m_{x,t})$, for each age x.  The parameters $a_{x}$, $b_{x}$ and $k_{t}$ can be found by WLS, where the sum of squared errors is minimized:  
+
+\begin{equation}
+\sum_{x=1}^{X}\sum_{t=1}^{T} d_{x,t}[ln(m_{x,t})-a_{x}+b_{x}k_{t}]^2
+\end{equation}
+
+\subsubsection{Alternative models}
+There are many alternative models for modeling mortality. In Plat (2011) several mortality models are mentioned. We choose to compare the Lee-Carter model to the Renshaw and Haberman (2006) and Currie (2006) model because these deal with some of the deficiencies inherent to Lee-Carter.
+One of the drawbacks of the Lee-Carter model is that it gives a poor fit to historical data when there is a cohort effect observed in the past. Therefore, Renshaw and Haberman (2006) introduced a new model that incorporated the cohort effect by the random cohort effect factor $\gamma_{t-x}$. This cohort effect factor depends on the year of birth $$(t-x)$$. The model is defines as:
+\begin{equation}
+ln(m_{x,t})=a_{x}+b_{x}^1 k_{t}+b_{x}^2 \gamma_{t,x}
+\end{equation}
+with the constraints $\sum_t k_t = 0$ and $\sum_t \sum_x \gamma_{t,x}=0$
+
+
+
+% to be continued about BIC if we want that
+%------------------------------------------------------------------------------------
+
+\subsection{Market model }
+\subsubsection{Wang transform}
+%section about Wang
+Our first method of choice for pricing The Long Run's longevity risk has been the Wang transformation. However, at an early stage in our study it became apparent that this method had some inherent flaws which may render it unusable for our purposes. Nevertheless, we will provide here a brief overview of its mechanics and our preliminary results. We will then discuss its shortcomings, our discussion with the management on this issue and finally we will introduce a more viable alternative.\\
+
+The Wang Transform is executed by inserting the Best Estimate survival probabilities into the inverse normal Cumulative Distribution Function. This transforms them into z-scores which are added to a factor lamna, representing the market price of risk. The sum which is equal to the shifted standardized variables is then transformed back again to survival probabilities by inserting it into a normal CDF. Wang (2002) states that this is an application of the more widely known CAPM model to non-normally distributed variables.\\
+
+The transformed probabilities are considered to be risk-neutral, that is, by applying them there supposedly would not be any further need for additional risk premia. In calculating the market price of longevity risk they function in much the same way as the actual survival probabilities would. They are multiplied by the principal amount and discounted to their present values. Equality of this risk-neutral valuation to a Best Estimate liability plus premia, leads to an outcome for said premia.\\
+
+Following this method, we currently find unrealistically low values for the swap rate. A commonly encountered value in the literature would be a value of 0.2 for lamna, however, this results in an average swap rate of less than one percent. We are therefore rather wary of implementing the Wang transform. In the coming week we will see if there are other issues causing this unreasonable value. Besides our own experience there are also serious theoretical and empirical arguments against the Wang method. The main one deals with the establishment of a suitable lamna, where some authors even go so far as to say that the method itself is arbitrary. Where there a complete market, we could at least obtain a credible value from market data. There is no such thing at the moment, so our study concerning the Wang Transform will necessarily need to be restricted to a possible over-the-counter deal. We have therefore requested our management to supply us with an offer for lamna from an interested counter-party. We are also pursueing other possibilities and the following method may deliver a more satisfactory result.\\
+
+
+\subsubsection{Sharpe ratio pricing}
+
+%section about Sharpe ratio
+One of the basic building blocks in the financial world are forward agreements. Two parties agree to swap payments at a future date, one is fixed and the other depends on an underlying index. In the case of q-forwards this index is in some way related to the mortality rate. To hedge longevity risk the insurer can enter into a contract where it receives the fixed mortality rate and pays the floating. Notice that the Long Run wants to hedge longevity risk so by \emph{receiving} the fixed mortality and \emph{paying} the floating leg that depends on mortality it will be  insured against an increase in the survival rate $(1-q_t)$. \\
+
+The pricing of this q-forward is similar to the pricing of a forward on interest rate risk. The investor will require some compensation for the risk and therefore the forward rates for mortality will lie below the expected mortality rate (Couglan, 2007). \\
+
+Loeys (2007) used the Sharpe ratio to incorporate the compensation for the investor in the pricing of the forward agreement for $n$ years. The Sharpe ratio is the expected return over the volatility $E(R)/\sigma_n$.
+The expected annualised return of the forward (on mortality) is:
+$$
+E(R)=\frac{q_{exp} - q_{forward}}{n}
+$$
+with $q_{exp}$ and $q_{forward}$ the expected and agreed forward mortality rate.\\
+And the volatility $ \sigma_n=\sigma_e*\sqrt{n} $, based on the annualised risk $\sigma_e$.\\
+
+Combining those two equations:\\
+\begin{align}
+q_{exp} - q_{forward} &=  n*E(R) \notag \\
+q_{forward} &=  q_{exp}-n*E(R)=q_{exp}-n*Sharpe Ratio*\sigma_{n} \notag \\
+&=  q_{exp}(1-n*Sharpe Ratio*\sigma_{e}*\sqrt{n}) \notag 
+\end{align}
+
+This calculated forward rate and corresponding expected return implies the Sharp ratio that is the risk premium for the investor. The formulas above are for annualised rates, for the final cash flows at maturity similar calculations hold.\\
+We will calculate this rates for several premia and investigate if the discount on mortality rates pays off for the Long Run.\\
+%------------------------------------------------------------------------------------
+
+%------------------------------------------------------------------------------------
+
+\section{Tooling choice and motivation}
+
+
+%------------------------------------------------------------------------------------
+
+\section{Results}
+
+\subsection{Comparison of different mortality models}
+
+We compared Lee-Carter with the Renshaw-Haberman's and the Curie's mortality model based on information criteria
+The first information criterion that we use is the Bayesian Information Criterion (BIC), which is defined as:
+$$BIC=L(\hat{\phi})-\frac{1}{2}K \ln N$$
+\noindent where $L(\hat{\phi})$ is the log-likelihood function, $\hat{\phi}$ is the MLE for the parameter set, $N$ is the number of observations and $K$ is the number of parameters estimated.
+The other information criterion that is used is the Akaike Information Criterion (AIC), and this criterion is defined as:
+$$AIC=  L(\hat{\phi}) - K $$
+Both models penalise for the inclusion of additional estimated parameters. According to these definitions of the BIC and AIC values, the model with the highest value(s) is preferred. First we will introduce the alternative models, and next the comparison of criteria is shown.  In the Appendix output graphs for the different models is shown.
+
+\subsubsection{Renshaw-Haberman's mortality model}
+Renshaw-Haberman's model (2006) incorporates possible cohort effects that appear in the mortality data, because of smoking or some epidemia. They extended Lee-Carter's model by adding a random cohort effect factor $\gamma_{t-x}$. This cohort effect factor depends on the year of birth t-x. The model is defined as:
+$$\ln(m_{x,t})=a_{x}+b^{1}_{x}k_{t}+b^{2}_{x}\gamma_{t-x}$$
+with the contraints $\sum_{t}k_{t}=0$ and $\sum_{t}\sum_{x}\gamma_{t-x}=0$.
+
+\subsubsection{Curie's mortality model}
+Curie (2006) introduced his model as adaption of Renshaw-Haberman's model, since their model suffered from a lack of robustness. Curie's model is a simplification of Renshaw-Haberman's model that removes the robustness problem.
+$$\ln(m_{x,t})=a_{x}+k_{t}+\gamma_{t-x}$$ 
+with the constraints $\sum_{t}k_{t}=0$ and $\sum_{t}\sum{x}\gamma_{t-x}=0$.
+
+\subsubsection{Comparison of the model using the Lifemetrics toolpackage}
+The models stated above, Renshaw-Haberman and Curie, can be fit to our mortality data by using the Lifemetrics toolpackage from R. This is a powerful package that is written by Andrew Cairns and made available as open source R code since 2007. 
+
+This package provides a R code to fit and simulate several mortality models. The BIC is computed in the fitting procedure, and the AIC computations are added to the code. The results are given in the table below.
+\begin{center}
+	\begin{table}[h!]	
+		\begin{center}
+			\begin{tabular}{ | l | l | l | p{5cm} |}
+				\hline
+				\multicolumn{3}{|c|}{\textbf{Fit statistics}} \\
+				\hline
+				\textbf{Model} & \textbf{BIC value} & \textbf{AIC value }\\ \hline			
+				Lee-Carter & -1076807 & -1075527 \\ \hline
+				Renshaw-Haberman & \underline{-978241} &  \underline{-975685} \\ \hline
+				Currie & -1076807 & -1112991\\ \hline
+				
+			\end{tabular}
+			\caption{BIC values for the mortality models}
+		\end{center}
+	\end{table}
+\end{center}
+
+Furthermore, plots of the parameter values are added in appendix B for each of the three mortality models (Lee-Carter, Renshaw Haberman and Currie).
+
+Based on these information criteria, the Renshaw-Haberman seems to perform best. 
+
+\subsection{Mortality}
+With the chosen model from the section above we will perform the calculations for this ALM.
+As a first step, we model the future mortality using the Lee-Carter model. As input, we use data from the Human Mortality Database  (HMD) consisting of the population and mortality figures for Dutch men and women. 
+%mortality data van nederlandse mannen/vrouwen of totaal?? ans-> totaal.
+We fit the Lee-Carter model to the total historical mortality data for men and women from the HMD.
+$$ln(m_{x,t})=a_{x}+b_{x}k_{t}$$
+We use the demography and forecast package from Hyndman (2015) that proves to be very useful and applicable to the data used. The r-script for fitting and simulation is added in appendix A.
+
+
+\newpage
+\subsection{Fitting the Lee-Carter model}
+The output from the Lee-Carter model is presented in the following graphs. 
+\begin{figure}[ht!]
+	\subfloat[Values for $a_{x}$]{\includegraphics[width = 3in]{ax.pdf}} 
+	\subfloat[Values for $b_{x}$]{\includegraphics[width = 3in]{bx.pdf}}\\
+	\subfloat[Values for $k_{t}$]{\includegraphics[width = 3in]{kt.pdf}}
+	\subfloat[Fitted values for the mortality rates.]{\includegraphics[width = 3in]{Mxfitted.pdf}} 
+	\caption{Output from the Lee-Carter model.}
+\end{figure}
+
+The decreasing value of the $k_{x}$, which follows a random walk with trend shows the trend in mortality rate that underlies the longevity risk.
+
+\newpage
+\subsection{Simulating future mortality}
+By simulating the future mortality, we can compute the value of the technical provision, which is must be reported on the balance sheet.
+\\ \\
+To simulate the future mortality, future values of $k_{t}$ are needed. Those are forecast by a random walk with drift model. Then the future mortality rates $m_{x,t}$ can be predicted by these future values of $k_{t}$ and the found values for $a_{x}$ and $b_{x}$. 
+\\ \\
+The technical provision is equal to the actuarial present value of the benefits. In the following histogram, the distribution of the observed outcomes of the technical provision is presented. In a later stadium of the study another run will be computed with a larger number of simulations.
+\begin{figure}[ht!]
+	\includegraphics[width=100mm]{TPsim.pdf}
+	\caption{Histogram of the simulation output.}
+\end{figure}
+\\ \\ 
+The best estimate of liabilities under the current assumptions (mortality modelled with Lee Carter without experience rate and the DNB curve for interest rate) is 182004689.
+
+\subsection{Pricing results}
+
+As the necessary conditions to imply pricing with the Wang transform are not met the ALM team has worked out the prices for the policies under the Sharpe ratio. The premium that is found for a Sharpe ratio of 0.20 is 17.887.671. This is an average premium of 7.81\% per policy. The minimum premium is 0.167\% of the benefit (for a 55 year old with one year till expiration of the life contract) and the maximum premium is 41.5\% (for a 41 year old with 41 years till expiration of his contract).
+
+The longevity swap will not change the duration of the liabilities but will increase the Solvency ratio. As 17 million need to be paid now to insure the risk of longevity this will be a big hit on the own funds. This swap will on the other hand makes sure that the liabilities will not increase unexpected over the lifetime of the policies due to an unexpected decrease in mortality. This risk will be carried by the counterparty that has agreed to take over the risk. 
+
+\subsection{Longevity under Solvency II}
+As mitigating the risk of longevity is desired it is important to investigate what happens to the capital requirements after the hedge.  The Solvency II directives state that valuation of liabilities needs to be\\ 
+
+"\emph{at the amount for which they could be transferred,
+	or settled, between knowledgeable willing parties in an arm's length
+	transaction.}" (EIOPA, 2014) \\ \\
+The market for longevity is not liquid enough to transfer the risk into the market. For risks that cannot be hedged or set away against low costs a market value margin needs to be hold. This market value margin is equal to the Cost-of-Capital (set at 6\% under SII) times the capital that is required for the non-hedgeable risks.\\
+
+The SCR for longevity risk according to the standard formula is the change in basic own funds due to  \emph{"an instantaneous permanent decrease of 20\% in mortality rates used for the calculation of technical provisions"} (EIOPA, 2014). This leads to a capital requirement of 832687.\\
+
+The cost-of-capital decreases over the lifetime of this portfolio as the longevity risk will get lower as benefits are paid. A visual representation of the cash flows and CoC is given in figure 1.
+
+\begin{figure}[ht!]
+	\centering
+	\includegraphics[width=100mm]{CoC.pdf}
+	\caption{Cash flows of benefits and Cost-of-Capital}
+\end{figure}
+
+The longevity swap can give a release in required capital. This reduce in capital should compensate for the premium paid on the illiquid market for longevity risk.
+
+\newpage
+\subsection{Asset side}
+The assets side is exposed to several market risks. For the Long Run this are equity, property and interest rate the risk to consider. The management has indicated that the asset side is hedged with key rate duration. Portfolios can have a different effective duration for the short, middle and long end of the yield curve. Duration matching considering a parallel shift of the interest rate curve is therefore not appropriate. Key rate duration can be used to measure the exposure to yield curve risk. The way key rate duration matching is implemented is that for different key maturity rates the duration of assets and liabilities is matched according to the following formula:
+Key rate duration $= \frac{P_{down} - P_{up}}{2*0.01*P_0}$ \\
+where $P_0$ is the securities price and $P_{up}$ and $P_{down}$ are the changes in the yield curve. 
+
+A drawback of this method is that the interpretation of the rates for different maturities are not very intuitive, the key rate durations can have strange jumps for individual points (Ho, 1992). Nevertheless we think that the way the interest rate is monitored and hedged is at this moment appropriate and prudent.
+
+counterparty risk.
+
+
+Suggestion to take on the asset side assets that increase under longevity: hospitals, elderly care, glasses, hearing impared devices and hip surgery.
+
+\newpage
+
+%--------------------------------------------------------------------------------------------------
+\section{Conclusions}
+
+\newpage
+
+\addcontentsline{toc}{section}{Appendix A}
+
+\section*{Appendix A}
+\label{Appendix A}
+
+
+Fitting the mortality models using LifeMetrics open source R code.
+\begin{itemize}
+	\item First we need to define the input needed for the mortality models.\\
+	\begin{lstlisting}[language=R]
+	#choose working directory
+	setwd("C:/Users/Eigenaar/Documents/Studie/ALM")
+	# import csv bestanden
+	Deaths<-read.csv("Deaths5.csv",header=T, sep=",")
+	Exposure<-read.csv("exposure2.csv",header=T, sep=";")
+	Weights <-read.csv("weights.csv",header=T, sep=";")
+	
+	#define the input for the functions
+	xv <- as.vector(seq(0,89))
+	yv <- as.vector(seq(1850,2009))
+	m<-length(yv)
+	n=length(xv)
+	etx <- t(Exposure)
+	dtx <- t(Deaths)
+	wa <- t(Weights)
+	\end{lstlisting}
+	\item Then it is time for the fitting procedure. The functions that are needed can be found in the LifeMetrics open source R code in the file `fitmodels.r'. We run the functions fit701 for the Lee-Carter model, fit702 for the Renshaw-Haberman model and fit703 for the Curie model. 
+	\item To plot the output of the Lee-Carter fitting procedure, we use the following R code:
+	\begin{lstlisting}[language=R]
+	lc=fit701(xv,yv,etx,dtx,wa)
+	LCmhat<-t(lc$mhat)
+	plot(lc$x,lc$beta2, type="l", xlab="age", ylab="b(x)")
+	plot(lc$x,lc$beta1, type="l", xlab="age", ylab="a(x)")
+	plot(lc$y,lc$kappa2, type="l", xlab="year", ylab="k(t)")
+	matplot(lc$x,LCmhat, type="l",xlab="age", 
+	ylab="fitted mortality rates")
+	
+	lc$BIC
+	lc$AIC
+	\end{lstlisting}
+	\item To plot the output of the Renshaw-Haberman fitting procedure, we use the following R code:
+	\begin{lstlisting}[language=R]
+	rens=fit702(xv,yv,etx,dtx,wa)
+	RensMhat<-t(rens$mhat)
+	plot(rens$x,rens$beta2, type="l", xlab="age", ylab="b1(x)")
+	plot(rens$x,rens$beta1, type="l", xlab="age", ylab="a(x)")
+	plot(rens$x,rens$beta3, type="l", xlab="age", ylab="b2(x)")
+	plot(rens$cy,rens$gamma3, type="l", xlab="year of birth", 
+	ylab="gamma(t-x)")
+	plot(rens$y,rens$kappa2, type="l", xlab="year", ylab="k(t)")
+	matplot(rens$x,RensMhat,type="l",xlab="age",
+	ylab="fitted mortality rates")
+	
+	Rens$BIC
+	Rens$AIC
+	\end{lstlisting}
+	\item To plot the output of the Currie fitting procedure, we use the following R code:
+	\begin{lstlisting}[language=R]
+	cur=fit703(xv,yv,etx,dtx,wa)
+	CurMhat<-t(cur$mhat)
+	plot(cur$cy,cur$gamma3, type="l", xlab="year of birth", 
+	ylab="gamma(t-x)")
+	plot(cur$x,cur$beta1, type="l", xlab="age", ylab="a(x)")
+	plot(cur$y,cur$kappa2, type="l", xlab="age", ylab="k(t)")
+	matplot(cur$x,CurMhat, type="l", xlab="age", 
+	ylab="fitted mortality rates")
+	
+	cur$BIC
+	cur$AIC
+	\end{lstlisting}
+\end{itemize}
+
+\newpage
+\addcontentsline{toc}{section}{Appendix B}
+\section*{Appendix B}
+Plots from the parameters and fitted mortality rates obtained by the LifeMetrics package for the three mortality models.
+
+\begin{figure}[ht!]
+	\subfloat[Values for $a_{x}$]{\includegraphics[width = 3in]{Plot_LC_alpha.pdf}} 
+	\subfloat[Values for $b_{x}$]{\includegraphics[width = 3in]{Plot_LC_beta.pdf}}\\
+	\subfloat[Values for $k_{t}$]{\includegraphics[width = 3in]{Plot_LC_kappa.pdf}} 
+	\subfloat[Fitted values of the mortality rate $m_{x,t}$]{\includegraphics[width = 3in]{Plot_LC_mhat.pdf}}
+	\caption{Output from the Lee-Carter model.}
+\end{figure}
+
+\newpage
+\begin{figure}[ht!]
+	\subfloat[Values for $a_{x}$]{\includegraphics[width = 3in]{Plot_Rens_alpha.pdf}} 
+	\subfloat[Values for $b^{1}_{x}$]{\includegraphics[width = 3in]{Plot_Rens_beta1.pdf}}\\
+	\subfloat[Values for $k_{t}$]{\includegraphics[width = 3in]{Plot_Rens_kappa.pdf}}
+	\subfloat[Values for $b^{2}_{x}$]{\includegraphics[width = 3in]{Plot_Rens_beta2.pdf}} \\
+	\subfloat[Values for $\gamma_{t-x}$]{\includegraphics[width = 3in]{Plot_Rens_gamma.pdf}} 
+	\subfloat[Fitted values of the mortality rate $m_{x,t}$]{\includegraphics[width = 3in]{Plot_Rens_mhat.pdf}}\\
+	\caption{Output from the Renshaw-Haberman model.}
+\end{figure} 	     
+
+\newpage    
+\begin{figure}[ht!]
+	\subfloat[Values for $a_{x}$]{\includegraphics[width = 3in]{Plot_Cur_alpha.pdf}} 
+	\subfloat[Values for $k_{t}$]{\includegraphics[width = 3in]{Plot_Cur_kappa.pdf}}\\
+	\subfloat[Values for $\gamma_{t-x}$]{\includegraphics[width = 3in]{Plot_Cur_gamma.pdf}} 
+	\subfloat[Fitted values of the mortality rate $m_{x,t}$]{\includegraphics[width = 3in]{Plot_Cur_mhat.pdf}}
+	\caption{Output from the Currie model.}
+\end{figure}
+
+\newpage
+\clearpage
+\section*{References}
+\begin{itemize}
+	\item Bauer, D., Börger, M., Russ, J. and Zwiesler, H-J. (2008). The Volatility of Mortality, Asia-Pacific Journal of Risk and Insurance, Volume 3, Issue 1: 172-199.
+	\item Brouhns, N., Denuit, M. and Vermunt  J.K. (2002). A Poisson log-bilinear regression approach to the 
+	construction of projected lifetables. \textit{Insurance: Mathematics and Economics 31}, pp. 373ñ393
+	
+	\item Cairns, A. (2007). Lifemetrics open source R code. Retrieved from \url{http://www.macs.hw.ac.uk/~andrewc/lifemetrics/} on April 2, 2015.
+	\item Coughlan, G. (2007). q-Forwards: Derivatives for transferring longevity and mortality risk. 
+	\item Dawson, P., Dowd, K., Cairns, J.G., and Blake, D. (2010). Survivor derivatives: a consistent pricing framework.  The Journal of Risk and Insurance, Vol. 77, No. 3, 579-596
+	\item EIOPA (2014). Technical Specification for the Preparatory Phase (Part I). EIOPA-14/209.
+	
+	\item \textit{Human Mortality Database}. University of California, Berkeley (USA), and Max Planck Institute for Demographic Research (Germany). Retrieved from www.mortality.org on April 13, 2015.
+	\item Hyndman, R. J. (2015). Demograpy package. Retrieved from \url{http://robjhyndman.com/software/demography/} on April 17, 2015
+	\item Ho, T.S.Y. (1992). Key rate durations: measures of interest rate risk. The journal of fixed income, Vol. 2, No. 2, pp.29-44.
+	\item Lee, R. Ph.D. (2000). The Lee-Carter Method for Forecasting Mortality, with Various Extensions and 
+	Applications. \textit{North American Actuarial Journal}, 4(1), pp. 80-91.
+	\item Loeys, J.  Panigirtzoglou, N. and Ribeiro, R. (2007). Longevity: a market in making.
+	\item Plat, R. (2009). On Stochstic Mortality Modeling. \textit{Insurance: Mathematics and Economics 45 (3)}, pp.    
+	393-404.
+	\item Melenberg, B. Stevens, R. and Waegenaere, A. de (2009). Netspar Position Paper: Longevity.
+	\item Westland, H. (2009). Hedging Longevity Risk with Longevity Swaps. Economie \& Informatica. 
+	Retrieved from \url{http://hdl.handle.net/2105/4842} on April 2, 2015.
+\end{itemize}
+
+\end{document}

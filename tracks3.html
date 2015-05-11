@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>Tracks of ten double storm events</title>
+    <style>
+      html, body, #map-canvas1, #map-canvas2,#map-canvas3 {
+        height: 70%;
+        margin: 10px;
+        padding: 10px
+      }
+    </style>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true"></script>
+    <script>
+
+
+// Importing data prepared in R.
+function loadfile(file) {
+    var request;
+    if (window.XMLHttpRequest) {
+        // IE7+, Firefox, Chrome, Opera, Safari
+        request = new XMLHttpRequest();
+    } else {
+        // code for IE6, IE5
+        request = new ActiveXObject('Microsoft.XMLHTTP');
+    }
+    // load
+    request.open('GET', file, false);
+    request.send();
+    //parseCSV(request.responseText);
+}
+// function to check if anything is arriving.
+function parseCSV(data){
+    alert(data);
+}
+// making the first storm track map
+//track1 = loadfile("track1.txt");
+
+function initialize() {
+  // Create the map.
+  var mapOptions = {
+    zoom: 4,
+    center: new google.maps.LatLng(37.09024, -95.712891),
+    mapTypeId: google.maps.MapTypeId.TERRAIN
+  };
+  
+  var several = document.getElementsByClassName('canvas');
+  alert(several[3]);
+  for (i=0; i<10; i++){
+  var map = new google.maps.Map(several[i],
+      mapOptions);
+  }
+
+  // Construct the circle for each value in citymap.
+  // Note: We scale the area of the circle based on the population.
+  
+  
+}
+
+function myFunction(){
+  initialize();
+  google.maps.event.addDomListener(window, 'load', initialize);
+};
+
+    </script>
+  </head>
+  <body>
+  <!--%first storm section-->
+ 
+    <button type="button" onclick="myFunction()">Try it</button>
+    <div id="map-canvas1" class="canvas"></div>
+    <div id="description">Gero and Erwin</div>
+
+  <!--%first storm section-->
+    <button type="button" onclick="myFunction(2)">Try it</button>
+    <div id="map-canvas2" class="canvas">b</div>
+    <div id="description2">Gero and Erwin</div>
+
+  <!--%first storm section-->
+    <button type="button" onclick="myFunction(3)">Try it</button>
+    <div id="map-canvas3" class="canvas">c</div>
+    <div id="description3">Gero and Erwin</div>
+
+  <!--%first storm section-->
+    <button type="button" onclick="myFunction(4)">Try it</button>
+    <div id="map-canvas4" class="canvas"></div>
+    <div id="description4">Gero and Erwin</div>
+
+  <!--%first storm section-->
+    <button type="button" onclick="myFunction(5)">Try it</button>
+    <div id="map-canvas5" class="canvas"></div>
+    <div id="description5">Gero and Erwin</div>
+                  
+  </body>
+</html>

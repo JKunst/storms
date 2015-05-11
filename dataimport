@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	<p> 
+	<h1>
+	This is the header
+	</h1>
+	and subheader
+	</p>
+	</head>
+
+<body>
+	
+<script>
+function loadCSV(file) {
+    var request;
+    if (window.XMLHttpRequest) {
+        // IE7+, Firefox, Chrome, Opera, Safari
+        request = new XMLHttpRequest();
+    } else {
+        // code for IE6, IE5
+        request = new ActiveXObject('Microsoft.XMLHTTP');
+    }
+    // load
+    request.open('GET', file, false);
+    request.send();
+    parseCSV(request.responseText);
+}
+function parseCSV(data){
+    alert(data);
+}
+loadCSV("data.txt");
+</script>
+</body>
+</html>
